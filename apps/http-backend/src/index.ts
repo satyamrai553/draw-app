@@ -1,14 +1,10 @@
-import Express from 'express'
-
-
-const app = Express();
-
-app.listen(3001)
+import { app } from "./app";
 
 
 
-
-
+app.listen(3001, ()=>{
+    console.log("App is listening on port: 3001")
+})
 
 
 
