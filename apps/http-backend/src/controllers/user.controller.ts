@@ -1,14 +1,19 @@
 import { Request, Response } from "express"
 import jwt  from "jsonwebtoken";
-
-
+import {CreateUserSchema, SigninSchema, CreatRoomSchema} from "@repo/common/types"
+ 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
-
-async function login(req: Request,res: Response){
+async function signin(req: Request,res: Response){
     try {
-        
+        const data = SigninSchema.safeParse(req.body)
+    if(!data){
+        return res.json({
+            status: 401,
+            message: "Invalid inputs"
+        })
+    }
     } catch (error) {
       console.log("Error while loging user: ", error)  
     }
@@ -18,13 +23,14 @@ async function login(req: Request,res: Response){
 
 async function register(req: Request,res: Response){
 try {
-    const {email, password} = req.body;
-    if([email,password].some((data)=>data.trim() === "")){
-        res.status(401).json({
-            message: "Email or password is required"
+    const data = CreateUserSchema.safeParse(req.body);
+    if(!data.success){
+        return res.json({
+            status: 401,
+            message: "Invalid inputs"
         })
-        return;
     }
+    
     //db call 
     const userId = 1
 
@@ -46,6 +52,13 @@ try {
 
 async function createRoom(req: Request,res: Response){
 try {
+    const data = CreatRoomSchema.safeParse(req.body)
+    if(!data){
+        return res.json({
+            status: 401,
+            message: "Invalid inputs"
+        })
+    }
     res.json({
         roomId: "123"
     })
@@ -59,7 +72,7 @@ try {
 
 
 export {
-    login,
+    signin,
     register,
     createRoom
 }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken'
-
+import {JWT_SECRET} from "@repo/backend-common/config"
 // Extend Express Request interface to include userId
 declare global {
   namespace Express {
@@ -14,7 +14,7 @@ declare global {
 
 export function middleware( req: Request, res: Response, next: NextFunction){
     const token = req.headers["authorization"] ?? "";
-    const jwtSecret = process.env.JWT_SECRET;
+    const jwtSecret = JWT_SECRET;
     if (!jwtSecret) {
         return res.status(500).json({ error: "JWT secret is not defined" });
     }
