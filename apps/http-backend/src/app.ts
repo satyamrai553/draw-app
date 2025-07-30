@@ -9,7 +9,7 @@ export const app: Application = express();
 
 //import routes
 
-import userRouter from "./routes/user.route.ts"
+import userRouter from "./routes/user.route"
 
 
 app.use("/user", userRouter)
