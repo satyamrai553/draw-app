@@ -10,9 +10,16 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "exports":{
+    "./client": "./src/index.ts"
+  },
+
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^24.1.0",
-    "prisma": "^6.13.0",
-    "@repo/typescript-config": "workspace:*"
+    "prisma": "^6.13.0"
+  },
+  "dependencies": {
+    "@prisma/client": "6.13.0"
   }
 }
