@@ -1,5 +1,5 @@
 {
-  "name": "db",
+  "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,17 +9,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "exports":{
+  "type": "module",
+  "exports": {
     "./client": "./src/index.ts"
   },
-
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^24.1.0",
     "prisma": "^6.13.0"
   },
   "dependencies": {
-    "@prisma/client": "6.13.0"
+    "@prisma/client": "6.13.0",
+    "@types/dotenv": "^8.2.3",
+    "dotenv": "^17.2.1"
   }
 }
