@@ -11,7 +11,7 @@ async function signin(req: Request,res: Response){
     try {
         
         const data = SigninSchema.safeParse(req.body)
-    if(!data){
+    if(!data.success){
         return res.json({
             status: 401,
             message: "Invalid inputs"
@@ -41,6 +41,13 @@ async function signin(req: Request,res: Response){
         message: "Incorrect password",
     })
     }
+
+    const token = jwt.sign({
+        userId: user?.id
+    }, JWT_SECRET ?? "")
+    res.status(200).json({
+        token
+    })
 
     } catch (error) {
       console.log("Error while loging user: ", error)  
@@ -82,11 +89,9 @@ try {
    const userId = newUser.id;
     
 
-    const token = jwt.sign({
-        userId
-    }, JWT_SECRET ?? "")
+    
     res.status(200).json({
-        token
+        userId
     })
 } catch (error) {
     console.log("Error while registering user: ", error)
@@ -101,14 +106,31 @@ try {
 async function createRoom(req: Request,res: Response){
 try {
     const data = CreatRoomSchema.safeParse(req.body)
-    if(!data){
+    if(!data.success){
         return res.json({
             status: 401,
             message: "Invalid inputs"
         })
     }
-    res.json({
-        roomId: "123"
+
+
+    const userId = req.userId;
+
+    if (!userId) {
+        return res.status(400).json({
+            status: 400,
+            message: "Missing userId"
+        });
+    }
+
+    const room = await prismaClient.room.create({
+        data: {
+            slug: data.data.name,
+            adminId: userId
+        }
+    })
+    return res.json({
+        roomId: room.id
     })
 } catch (error) {
     console.log("Error while creating rooom: ", error)
