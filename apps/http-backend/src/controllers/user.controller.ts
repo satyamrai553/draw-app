@@ -139,10 +139,49 @@ try {
 
 
 
+async function getChat(req:Request,res: Response){
+    try {
+        const roomId = Number(req.params.roomId);
+        if(!roomId){
+            return res.status(404).json({
+                message: "Room id not found!"
+            })
+        }
+        const message = await prismaClient.chat.findMany({
+            where:{
+                roomId: roomId
+            },
+            orderBy:{
+                id: "desc"
+            },
+            take: 50
+        })
+
+        return res.json({
+            message
+        })
+    } catch (error) {
+     console.log(Error);   
+    }
+}
+
+async function  getSlug(req: Request, res: Response) {
+    const slug = req.params.slug;
+    const room = await prismaClient.room.findFirst({
+        where:{
+            slug
+        }
+    });
+    res.json({
+        room
+    })
+}
 
 
 export {
     signin,
     register,
-    createRoom
+    createRoom,
+    getChat,
+    getSlug
 }
