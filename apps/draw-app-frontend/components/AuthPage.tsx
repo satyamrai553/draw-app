@@ -1,6 +1,38 @@
 "use client";
+import { Base_URL } from "@/config";
+import { useState } from "react";
+import axios from "axios";
 
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPasswrod, setConfirmPassword] = useState("");
+
+
+
+  async function submitHandler(){
+    if(isSignin){
+      try {
+        const response = await axios.post(`${Base_URL}/user/signin`, {username, password})
+  
+      } catch (error) {
+        console.log("Error: ",error)
+      }
+    }
+    else{
+      try {
+        if(password === confirmPasswrod){
+          const response = await axios.post(`${Base_URL}/user/register`, {username, password, name:username})
+        }
+        else{
+          return
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
@@ -20,14 +52,15 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
         <div className="p-8">
           <div className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                Username
               </label>
               <input
-                type="email"
-                id="email"
-                placeholder="your@email.com"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                type="text"
+                id="username"
+                placeholder="Username"
+                className="w-full px-4 py-3 rounded-lg border text-gray-700 border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                onChange={(e)=>{setUsername(e.target.value)}}
               />
             </div>
 
@@ -39,7 +72,8 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 type="password"
                 id="password"
                 placeholder="••••••••"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg border text-gray-700 border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                onChange={(e)=>{setPassword(e.target.value)}}
               />
             </div>
 
@@ -52,7 +86,8 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   type="password"
                   id="confirm-password"
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg border text-gray-700 border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                  onChange={(e)=>{setConfirmPassword(e.target.value)}}
                 />
               </div>
             )}
@@ -77,7 +112,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
             )}
 
             <button
-              onClick={() => {}}
+              onClick={submitHandler}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition duration-200 shadow-md"
             >
               {isSignin ? "Sign In" : "Sign Up"}

@@ -61,6 +61,7 @@ async function signin(req: Request,res: Response){
 async function register(req: Request,res: Response){
 try {
     const data = CreateUserSchema.safeParse(req.body);
+    console.log(data)
     if(!data.success){
         return res.json({
             status: 401,

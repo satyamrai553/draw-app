@@ -26,9 +26,9 @@ export default function Home() {
             <a href="#how-it-works" className="text-gray-600 hover:text-purple-600">How It Works</a>
             <a href="#pricing" className="text-gray-600 hover:text-purple-600">Pricing</a>
           </div>
-          <Link href="/singup">
+          <Link href={"/singup"}>
             <div className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
-              Start Drawing
+             Sign in / Sign up 
             </div>
           </Link>
         </nav>
