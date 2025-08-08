@@ -1,4 +1,5 @@
-import { clear } from "node:console";
+import { drawService } from "@/services/drawing";
+
 
 type Shape ={
     type: "rect";
@@ -9,15 +10,22 @@ type Shape ={
 } | {
     type: "circle";
     centerX: number;
-    centery: number;
+    centerY: number;
     radius: number;
 }
 
 export function initDraw(canvas: HTMLCanvasElement){
      
             const ctx = canvas.getContext("2d");
-
+            
             let existingShape: Shape[] = [];
+            
+                const shape = drawService.getDrawing()
+                if(shape){
+                    existingShape = shape;
+                }
+                
+        
 
 
             if(!ctx){
@@ -28,6 +36,7 @@ export function initDraw(canvas: HTMLCanvasElement){
             let clicked = false;
             let startX = 0;
             let startY = 0;
+            
 
             canvas.addEventListener("mousedown", (e)=>{
                 clicked = true;
@@ -72,4 +81,5 @@ function clearCanvas(existingShape: Shape[],canvas: HTMLCanvasElement, ctx: Canv
             ctx.strokeRect(shape.x,shape.y, shape.width, shape.height);
         }
     })
+    drawService.setDrawing(existingShape);
 }

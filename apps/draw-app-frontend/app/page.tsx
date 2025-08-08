@@ -1,8 +1,26 @@
+"use client"
 // pages/index.js
+
+import { authService } from '@/services/Auth';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(()=>{
+    setIsAuthenticated(()=>{
+      return authService.getCurrentUser();
+    })
+  },[isAuthenticated])
+
+  function logoutHandler(){
+    authService.logout();
+    setIsAuthenticated(()=>{
+      return authService.getCurrentUser();
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <Head>
@@ -26,11 +44,19 @@ export default function Home() {
             <a href="#how-it-works" className="text-gray-600 hover:text-purple-600">How It Works</a>
             <a href="#pricing" className="text-gray-600 hover:text-purple-600">Pricing</a>
           </div>
-          <Link href={"/singup"}>
-            <div className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
-             Sign in / Sign up 
+          
+          {isAuthenticated ? (<button onClick={logoutHandler}className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300">
+            Logout
+            </button>) : (<div className='flex'><Link href={"/signin"}>
+            <div className="bg-black text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300 mx-6">
+             login
             </div>
-          </Link>
+          </Link><Link href={"/signup"}>
+            <div className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+             Sign up 
+            </div>
+          </Link></div>)}
+          
         </nav>
       </header>
 
@@ -168,9 +194,9 @@ export default function Home() {
             <p className="text-xl mb-8 max-w-2xl mx-auto">
               Join thousands of artists who are already creating amazing artwork with SketchFlow.
             </p>
-            <Link href="/app">
+            <Link href="/canvas/local">
               <div className="bg-white text-purple-600 px-8 py-3 rounded-lg hover:bg-gray-100 transition duration-300 font-medium inline-block">
-                Start Drawing Now - It's Free
+                Start Drawing Now - It's Free 
               </div>
             </Link>
           </div>

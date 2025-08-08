@@ -7,7 +7,7 @@ import bcrypt from "bcrypt"
 
 
 
-async function signin(req: Request,res: Response){
+async function login(req: Request,res: Response){
     try {
         
         const data = SigninSchema.safeParse(req.body)
@@ -180,7 +180,7 @@ async function  getSlug(req: Request, res: Response) {
 
 
 export {
-    signin,
+    login,
     register,
     createRoom,
     getChat,

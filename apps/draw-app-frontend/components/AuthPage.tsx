@@ -1,9 +1,21 @@
 "use client";
-import { Base_URL } from "@/config";
-import { useState } from "react";
-import axios from "axios";
+
+
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { authService } from "@/services/Auth";
 
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
+  const router = useRouter();
+
+  useEffect(()=>{
+  const isAuthenticated  = authService.getCurrentUser();
+  if (isAuthenticated) {
+    router.push("/")
+  }
+  }, [router])
+  
+ 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPasswrod, setConfirmPassword] = useState("");
@@ -11,25 +23,18 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
 
 
   async function submitHandler(){
-    if(isSignin){
-      try {
-        const response = await axios.post(`${Base_URL}/user/signin`, {username, password})
-  
-      } catch (error) {
-        console.log("Error: ",error)
-      }
+    if(!isSignin){
+      if(password === confirmPasswrod){
+          const response = await authService.register(username,password,username)
+          console.log(response);
+        }
     }
     else{
-      try {
-        if(password === confirmPasswrod){
-          const response = await axios.post(`${Base_URL}/user/register`, {username, password, name:username})
+  
+        const response = await authService.login(username,password);
+        if(response.status === 200){
+          router.push("/")
         }
-        else{
-          return
-        }
-      } catch (error) {
-        console.log(error);
-      }
     }
   }
 
