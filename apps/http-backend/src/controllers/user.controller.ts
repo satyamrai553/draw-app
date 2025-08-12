@@ -148,7 +148,7 @@ async function getChat(req:Request,res: Response){
                 message: "Room id not found!"
             })
         }
-        const message = await prismaClient.chat.findMany({
+        const messages = await prismaClient.chat.findMany({
             where:{
                 roomId: roomId
             },
@@ -159,7 +159,7 @@ async function getChat(req:Request,res: Response){
         })
 
         return res.json({
-            message
+            messages
         })
     } catch (error) {
      console.log(Error);   
