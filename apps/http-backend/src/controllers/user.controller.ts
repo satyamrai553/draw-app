@@ -157,6 +157,11 @@ async function getChat(req:Request,res: Response){
             },
             take: 50
         })
+        if(!messages){
+            return res.json({
+                message:[]
+            })
+        }
 
         return res.json({
             messages
