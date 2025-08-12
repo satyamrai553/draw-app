@@ -71,7 +71,7 @@ export default function Home() {
               The most intuitive drawing app for artists of all levels. Create stunning digital art with our powerful yet simple tools.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <Link href="/signup">
+              <Link href="/createRoom">
                 <div className="bg-purple-600 text-white px-8 py-3 rounded-lg text-center hover:bg-purple-700 transition duration-300 font-medium">
                   Start Drawing for Free
                 </div>
@@ -85,7 +85,7 @@ export default function Home() {
             <div className="relative w-full max-w-md">
               <div className="absolute -top-6 -left-6 w-full h-full bg-purple-100 rounded-2xl"></div>
               <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-                <img src="/app-screenshot.png" alt="SketchFlow App Interface" className="w-full h-auto" />
+                <img src="https://res.cloudinary.com/dpxkotl1n/image/upload/v1754998125/Gemini_Generated_Image_w9gbd3w9gbd3w9gb_zqqp1s.png" alt="SketchFlow App Interface" className="w-full h-auto" />
               </div>
             </div>
           </div>
