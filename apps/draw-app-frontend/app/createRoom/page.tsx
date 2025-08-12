@@ -1,38 +1,57 @@
-"use client"
+"use client";
 
 import { authService } from "@/services/Auth";
 import { roomService } from "@/services/Room";
-
 import { useRouter } from "next/navigation";
-import { useEffect, useState, } from "react";
+import { useEffect, useState } from "react";
 
-
-export default function createRoom(){
+export default function CreateRoom() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [roomName, setRoomName] = useState("");
+    const [searchRoom, setSearchRoom] = useState("");
+    const [foundRoomId, setFoundRoomId] = useState(null); 
+    const [showModal, setShowModal] = useState(false);
+    const [foundRoomName, setFoundRoomName] = useState(""); 
 
     const router = useRouter();
-    useEffect(()=>{
+
+    useEffect(() => {
         const response = authService.getCurrentUser();
         setIsAuthenticated(response);
-        if(!response){
-            router.push("/signin")
+        if (!response) {
+            router.push("/signin");
         }
-    },[router])
+    }, [router]);
 
-
-
-   async function createRoomHandler(){
+    async function createRoomHandler() {
         const data = await roomService.creatRoom(roomName);
-        if(!data){
-            return;
-        }
-        const response = (data.data);
-        if(response.roomId){
-            router.push(`canvas/${response.roomId}`)
-        }
+        if (!data) return;
 
+        const response = data.data;
+        if (response.roomId) {
+            router.push(`canvas/${response.roomId}`);
+        }
     }
+
+   async function searchRoomHandler() {
+    const data = await roomService.getSlug(searchRoom);
+    if (!data) return;
+
+    const response = data.data;
+    if (response.room && response.room.id) {
+        setFoundRoomId(response.room.id);
+        setFoundRoomName(response.room.slug)
+        setShowModal(true);
+    } else {
+        alert("Room not found!");
+    }
+}
+    function joinRoom() {
+    if (foundRoomId) {
+        router.push(`canvas/${foundRoomId}`);
+    }
+}
+
 
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
@@ -40,12 +59,30 @@ export default function createRoom(){
                 <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
                     Create a Room
                 </h1>
+
+                {/* Search Room */}
+                <div className="flex flex-col gap-4 mb-6">
+                    <input
+                        type="text"
+                        placeholder="Search for a room..."
+                        className="border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
+                        onChange={(e) => setSearchRoom(e.target.value)}
+                    />
+                    <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow-md transition duration-200"
+                        onClick={searchRoomHandler}
+                    >
+                        Search Room
+                    </button>
+                </div>
+
+                {/* Create Room */}
                 <div className="flex flex-col gap-4">
                     <input
                         type="text"
                         placeholder="Enter room name"
                         className="border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        onChange={(e)=>{setRoomName(e.target.value)}}
+                        onChange={(e) => setRoomName(e.target.value)}
                     />
                     <button
                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200"
@@ -55,7 +92,37 @@ export default function createRoom(){
                     </button>
                 </div>
             </div>
+
+            {/* Modal */}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                        <h2 className="text-lg font-semibold mb-4 text-gray-800">
+                            Room Found!
+                        </h2>
+                        <p className="mb-4 text-gray-600">
+                            Room ID: <span className="font-mono">{foundRoomId}</span>
+                        </p>
+                        <p className="mb-4 text-gray-600">
+                            Room Name: <span className="font-mono">{foundRoomName}</span>
+                        </p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={joinRoom}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                            >
+                                Join Room
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
-
 }

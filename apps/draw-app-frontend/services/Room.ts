@@ -28,9 +28,9 @@ class RoomService{
     
     }
 
-    async getSlug(slug:string):Promise<string>{
+    async getSlug(slug:string){
          const resp = await axios.get(`${Base_URL}/user/room/${slug}`)
-         return  JSON.stringify(resp);
+         return  resp;
     }
 }
 
