@@ -18,9 +18,9 @@ class AuthService{
     }
     async  login(username: string, password: string){
        try {
-         const login = await axios.post(`${Base_URL}/user/login`)
+         const login = await axios.post(`${Base_URL}/user/login`, {username, password})
          if(login){
-             localStorage.setItem('jwtToken', login.data);
+             localStorage.setItem('jwtToken', JSON.stringify(login.data));
          }
          return login;
        } catch (error) {
